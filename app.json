@@ -1,0 +1,55 @@
+{
+  "name": "VidyBot",
+  "description": "A Telegram bot that downloads videos from various platforms and provides them in multiple formats with subtitle support.",
+  "repository": "https://github.com/mohammedteir/telegram-video-downloader-bot",
+  "keywords": ["go", "telegram", "bot", "video", "downloader"],
+  "buildpacks": [
+    {
+      "url": "heroku/go"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-apt"
+    }
+  ],
+  "env": {
+    "TELEGRAM_TOKEN": {
+      "description": "Your Telegram Bot Token",
+      "value": "8183493284:AAH0wGIz26zyfGRVZDaw4pLDTJjZrdN6Y-o"
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB connection string",
+      "value": "mongodb+srv://todo:H2S87O52OmpgwJ7Z@eastcluster.qlszngk.mongodb.net/?retryWrites=true&w=majority&appName=EastCluster"
+    },
+    "MONGODB_DATABASE": {
+      "description": "MongoDB database name",
+      "value": "video_downloader"
+    },
+    "REDIS_URI": {
+      "description": "Redis connection string",
+      "value": "rediss://default:AWKBAAIjcDE4OWExMDM1Y2I3OTg0YjIyYTM1MzBhOTE3NWU0NGQ4ZXAxMA@ace-gar-25217.upstash.io:6379"
+    },
+    "DOWNLOAD_TEMP_DIR": {
+      "description": "Temporary directory for downloads",
+      "value": "/tmp/video_downloader"
+    },
+    "LOG_LEVEL": {
+      "description": "Logging level",
+      "value": "info"
+    },
+    "RATE_LIMIT_ENABLED": {
+      "description": "Enable rate limiting",
+      "value": "true"
+    },
+    "RATE_LIMIT_REQUESTS_MAX": {
+      "description": "Maximum requests per time window",
+      "value": "10"
+    },
+    "RATE_LIMIT_TIME_WINDOW": {
+      "description": "Time window in seconds for rate limiting",
+      "value": "60"
+    }
+  }
+}

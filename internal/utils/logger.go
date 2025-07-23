@@ -1,0 +1,110 @@
+package utils
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"time"
+)
+
+// Logger provides logging functionality
+type Logger struct {
+	enabled bool
+	logFile *os.File
+	logger  *log.Logger
+}
+
+// NewLogger creates a new logger instance
+func NewLogger(enabled bool, logPath string) (*Logger, error) {
+	logger := &Logger{
+		enabled: enabled,
+	}
+
+	if enabled {
+		// Create log directory if it doesn't exist
+		logDir := filepath.Dir(logPath)
+		if err := os.MkdirAll(logDir, 0755); err != nil {
+			return nil, fmt.Errorf("failed to create log directory: %w", err)
+		}
+
+		// Open log file
+		file, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open log file: %w", err)
+		}
+
+		logger.logFile = file
+		logger.logger = log.New(file, "", log.LstdFlags)
+	} else {
+		// If logging is disabled, use a null logger
+		logger.logger = log.New(os.Stderr, "", log.LstdFlags)
+	}
+
+	return logger, nil
+}
+
+// Info logs an informational message
+func (l *Logger) Info(format string, v ...interface{}) {
+	if l.enabled {
+		l.logger.Printf("[INFO] "+format, v...)
+	}
+}
+
+// Error logs an error message
+func (l *Logger) Error(format string, v ...interface{}) {
+	if l.enabled {
+		l.logger.Printf("[ERROR] "+format, v...)
+	}
+}
+
+// Warn logs a warning message
+func (l *Logger) Warn(format string, v ...interface{}) {
+	if l.enabled {
+		l.logger.Printf("[WARN] "+format, v...)
+	}
+}
+
+// Debug logs a debug message
+func (l *Logger) Debug(format string, v ...interface{}) {
+	if l.enabled {
+		l.logger.Printf("[DEBUG] "+format, v...)
+	}
+}
+
+// Close closes the log file
+func (l *Logger) Close() {
+	if l.enabled && l.logFile != nil {
+		l.logFile.Close()
+	}
+}
+
+// CleanupOldLogs removes log files older than the specified duration
+func (l *Logger) CleanupOldLogs(logDir string, maxAge time.Duration) error {
+	if !l.enabled {
+		return nil
+	}
+
+	return filepath.Walk(logDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Skip directories
+		if info.IsDir() {
+			return nil
+		}
+
+		// Check if file is a log file
+		if filepath.Ext(path) == ".log" {
+			// Check if file is older than maxAge
+			if time.Since(info.ModTime()) > maxAge {
+				if err := os.Remove(path); err != nil {
+					return fmt.Errorf("failed to remove old log file %s: %w", path, err)
+				}
+			}
+		}
+
+		return nil
+	})
+}

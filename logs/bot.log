@@ -1,0 +1,50 @@
+2025/07/22 16:21:55 [INFO] Starting Telegram Video Downloader Bot
+2025/07/22 16:21:57 [INFO] ✅ Dependency 'yt-dlp' is installed
+2025/07/22 16:21:57 [INFO] ✅ Dependency 'aria2c' is installed
+2025/07/22 16:21:57 [INFO] ✅ Dependency 'ffmpeg' is installed
+2025/07/22 16:21:57 [INFO] ✅ Dependency 'ffprobe' is installed
+2025/07/22 16:22:05 [INFO] Bot started successfully
+2025/07/22 16:22:16 [INFO] Received text from chat ID 1151779389: https://vt.tiktok.com/ZSrvKgMro/
+2025-07-22T16:22:18.797Z	INFO	utils/enhanced_logger.go:180	Created download request 687fbab96bdd43b8ba0b185a for chat ID 1151779389: https://vt.tiktok.com/ZSrvKgMro/
+2025-07-22T16:22:21.016Z	INFO	utils/enhanced_logger.go:180	Updated download request 687fbab96bdd43b8ba0b185a status to processing
+2025-07-22T16:22:21.020Z	INFO	utils/enhanced_logger.go:180	Downloading high-resolution PNG thumbnail from https://vt.tiktok.com/ZSrvKgMro/
+2025-07-22T16:22:21.020Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
+2025-07-22T16:22:21.020Z	INFO	utils/enhanced_logger.go:180	Matched domain: tiktok.com, looking for cookie file: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025-07-22T16:22:21.022Z	INFO	utils/enhanced_logger.go:180	Cookie file found: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025-07-22T16:22:43.286Z	ERROR	utils/enhanced_logger.go:194	Thumbnail download failed: exit status 1, output: [vm.tiktok] Extracting URL: https://vt.tiktok.com/ZSrvKgMro/
+[vm.tiktok] ZSrvKgMro: Downloading webpage
+ERROR: [vm.tiktok] ZSrvKgMro: Unable to download webpage: [Errno 7] No address associated with hostname (caused by TransportError('[Errno 7] No address associated with hostname'))
+
+github.com/mohammedteir/telegram-video-downloader-bot/internal/utils.(*EnhancedLogger).Error
+	/data/data/com.termux/files/home/VidyBot/internal/utils/enhanced_logger.go:194
+github.com/mohammedteir/telegram-video-downloader-bot/internal/downloader.(*VideoDownloader).downloadThumbnail
+	/data/data/com.termux/files/home/VidyBot/internal/downloader/downloader.go:251
+github.com/mohammedteir/telegram-video-downloader-bot/internal/downloader.(*VideoDownloader).Download.func2
+	/data/data/com.termux/files/home/VidyBot/internal/downloader/downloader.go:134
+github.com/mohammedteir/telegram-video-downloader-bot/internal/utils.RetryWithContext
+	/data/data/com.termux/files/home/VidyBot/internal/utils/retry.go:72
+github.com/mohammedteir/telegram-video-downloader-bot/internal/downloader.(*VideoDownloader).Download
+	/data/data/com.termux/files/home/VidyBot/internal/downloader/downloader.go:133
+github.com/mohammedteir/telegram-video-downloader-bot/internal/handlers.(*BotHandler).processDownload
+	/data/data/com.termux/files/home/VidyBot/internal/handlers/handlers.go:749
+github.com/mohammedteir/telegram-video-downloader-bot/internal/handlers.(*BotHandler).handleText.func1
+	/data/data/com.termux/files/home/VidyBot/internal/handlers/handlers.go:570
+2025-07-22T16:22:43.287Z	WARN	utils/enhanced_logger.go:187	Retry attempt 1/3 after error: thumbnail download failed: exit status 1 (waiting 1s before next attempt)
+2025-07-22T16:22:44.287Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
+2025-07-22T16:22:44.289Z	INFO	utils/enhanced_logger.go:180	Matched domain: tiktok.com, looking for cookie file: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025-07-22T16:22:44.289Z	INFO	utils/enhanced_logger.go:180	Cookie file found: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025-07-22T16:23:52.951Z	INFO	utils/enhanced_logger.go:180	Successfully downloaded high-resolution PNG thumbnail to /data/data/com.termux/files/home/VidyBot/tmp/video_downloader/1753201341016558771/thumbnail.png
+2025-07-22T16:23:52.951Z	INFO	utils/enhanced_logger.go:180	Downloading primary video from https://vt.tiktok.com/ZSrvKgMro/
+2025-07-22T16:23:52.951Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
+2025-07-22T16:23:52.951Z	INFO	utils/enhanced_logger.go:180	Matched domain: tiktok.com, looking for cookie file: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025-07-22T16:23:52.951Z	INFO	utils/enhanced_logger.go:180	Cookie file found: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025/07/22 16:24:17 [INFO] Shutting down bot...
+2025-07-22T16:24:17.491Z	WARN	utils/enhanced_logger.go:187	aria2c download failed, trying direct download: exit status 1, output: WARNING: External Downloader arguments given without specifying name. The arguments will be given to aria2c
+[vm.tiktok] Extracting URL: https://vt.tiktok.com/ZSrvKgMro/
+[vm.tiktok] ZSrvKgMro: Downloading webpage
+
+ERROR: Interrupted by user
+
+2025-07-22T16:24:17.491Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
+2025-07-22T16:24:17.491Z	INFO	utils/enhanced_logger.go:180	Matched domain: tiktok.com, looking for cookie file: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025-07-22T16:24:17.491Z	INFO	utils/enhanced_logger.go:180	Cookie file found: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt

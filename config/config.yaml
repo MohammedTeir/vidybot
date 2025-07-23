@@ -1,0 +1,18 @@
+version: '1.0'
+
+telegram:
+  token: ${TELEGRAM_TOKEN}
+
+mongodb:
+  uri: ${MONGODB_URI}
+  database: ${MONGODB_DATABASE}
+
+redis:
+  uri: ${REDIS_URI}
+
+download:
+  temp_dir: ${DOWNLOAD_TEMP_DIR}
+
+log:
+  enabled: true
+  path: ./logs/bot.log

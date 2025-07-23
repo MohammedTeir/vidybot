@@ -1,0 +1,167 @@
+package config
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/joho/godotenv"
+	"github.com/mohammedteir/telegram-video-downloader-bot/internal/utils"
+	"github.com/spf13/viper"
+)
+
+// Config holds all configuration for the application
+type Config struct {
+	Telegram struct {
+		Token string `mapstructure:"token"`
+	} `mapstructure:"telegram"`
+	MongoDB struct {
+		URI      string `mapstructure:"uri"`
+		Database string `mapstructure:"database"`
+	} `mapstructure:"mongodb"`
+	Redis struct {
+		URI string `mapstructure:"uri"`
+	} `mapstructure:"redis"`
+	Download struct {
+		TempDir string `mapstructure:"temp_dir"`
+		Retries int    `mapstructure:"retries"`
+		Timeout int    `mapstructure:"timeout"` // in seconds
+	} `mapstructure:"download"`
+	Log struct {
+		Enabled      bool           `mapstructure:"enabled"`
+		Path         string         `mapstructure:"path"`
+		Level        utils.LogLevel `mapstructure:"level"`
+		MaxSize      int            `mapstructure:"max_size"`      // megabytes
+		MaxBackups   int            `mapstructure:"max_backups"`   // number of backups
+		MaxAge       int            `mapstructure:"max_age"`       // days
+		Compress     bool           `mapstructure:"compress"`      // compress rotated files
+		ConsoleLog   bool           `mapstructure:"console_log"`   // log to console
+		JSONFormat   bool           `mapstructure:"json_format"`   // use JSON format
+		CallerInfo   bool           `mapstructure:"caller_info"`   // include caller information
+		StackTraces  bool           `mapstructure:"stack_traces"`  // include stack traces for errors
+		Development  bool           `mapstructure:"development"`   // development mode
+		RotationTime int            `mapstructure:"rotation_time"` // hours
+	} `mapstructure:"log"`
+	RateLimit struct {
+		Enabled     bool `mapstructure:"enabled"`
+		RequestsMax int  `mapstructure:"requests_max"` // max requests per time window
+		TimeWindow  int  `mapstructure:"time_window"`  // time window in seconds
+		UserLimit   bool `mapstructure:"user_limit"`   // limit per user instead of globally
+	} `mapstructure:"rate_limit"`
+	Languages struct {
+		Path    string `mapstructure:"path"`
+		Default string `mapstructure:"default"`
+	} `mapstructure:"languages"`
+}
+
+// LoadConfig loads configuration from environment variables and config files
+func LoadConfig() (*Config, error) {
+	// Load .env file if it exists
+	_ = godotenv.Load()
+
+	// Initialize config
+	config := &Config{}
+
+	// Set up Viper
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("./config")
+	viper.AddConfigPath("/etc/telegram-video-downloader-bot/")
+
+	// Read config file
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Printf("Warning: Config file not found or error reading it: %v\n", err)
+	}
+
+	// Set defaults
+	viper.SetDefault("download.temp_dir", "./tmp/video_downloader")
+	viper.SetDefault("download.retries", 3)
+	viper.SetDefault("download.timeout", 300) // 5 minutes
+	
+	viper.SetDefault("log.enabled", true)
+	viper.SetDefault("log.path", "./logs/bot.log")
+	viper.SetDefault("log.level", "info")
+	viper.SetDefault("log.max_size", 100)
+	viper.SetDefault("log.max_backups", 5)
+	viper.SetDefault("log.max_age", 30)
+	viper.SetDefault("log.compress", true)
+	viper.SetDefault("log.console_log", true)
+	viper.SetDefault("log.json_format", false)
+	viper.SetDefault("log.caller_info", true)
+	viper.SetDefault("log.stack_traces", true)
+	viper.SetDefault("log.development", false)
+	viper.SetDefault("log.rotation_time", 24)
+	
+	viper.SetDefault("rate_limit.enabled", true)
+	viper.SetDefault("rate_limit.requests_max", 10)
+	viper.SetDefault("rate_limit.time_window", 60) // 1 minute
+	viper.SetDefault("rate_limit.user_limit", true)
+	
+	viper.SetDefault("languages.path", "./config/languages")
+	viper.SetDefault("languages.default", "en")
+
+	// Environment variables take precedence
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix("APP")
+
+	// Map environment variables to config fields
+	viper.BindEnv("telegram.token", "TELEGRAM_TOKEN")
+	viper.BindEnv("mongodb.uri", "MONGODB_URI")
+	viper.BindEnv("mongodb.database", "MONGODB_DATABASE")
+	viper.BindEnv("redis.uri", "REDIS_URI")
+	viper.BindEnv("download.temp_dir", "DOWNLOAD_TEMP_DIR")
+	viper.BindEnv("download.retries", "DOWNLOAD_RETRIES")
+	viper.BindEnv("download.timeout", "DOWNLOAD_TIMEOUT")
+	viper.BindEnv("log.enabled", "LOG_ENABLED")
+	viper.BindEnv("log.path", "LOG_PATH")
+	viper.BindEnv("log.level", "LOG_LEVEL")
+	viper.BindEnv("rate_limit.enabled", "RATE_LIMIT_ENABLED")
+	viper.BindEnv("rate_limit.requests_max", "RATE_LIMIT_REQUESTS_MAX")
+	viper.BindEnv("rate_limit.time_window", "RATE_LIMIT_TIME_WINDOW")
+	viper.BindEnv("languages.path", "LANGUAGES_PATH")
+	viper.BindEnv("languages.default", "LANGUAGES_DEFAULT")
+
+	// Unmarshal config
+if err := viper.Unmarshal(config); err != nil {
+    return nil, fmt.Errorf("failed to unmarshal config: %w", err)
+}
+
+// Convert relative download path to absolute
+absTempDir, err := filepath.Abs(config.Download.TempDir)
+if err != nil {
+    return nil, fmt.Errorf("failed to resolve absolute path for download dir: %w", err)
+}
+config.Download.TempDir = absTempDir
+
+// Validate required fields
+if config.Telegram.Token == "" {
+    return nil, fmt.Errorf("telegram token is required")
+}
+if config.MongoDB.URI == "" {
+    return nil, fmt.Errorf("mongodb URI is required")
+}
+if config.MongoDB.Database == "" {
+    return nil, fmt.Errorf("mongodb database name is required")
+}
+
+// Ensure download directory exists
+if err := os.MkdirAll(config.Download.TempDir, 0755); err != nil {
+    return nil, fmt.Errorf("failed to create download directory: %w", err)
+}
+
+	// Ensure log directory exists if logging is enabled
+	if config.Log.Enabled {
+		logDir := filepath.Dir(config.Log.Path)
+		if err := os.MkdirAll(logDir, 0755); err != nil {
+			return nil, fmt.Errorf("failed to create log directory: %w", err)
+		}
+	}
+
+	// Ensure languages directory exists
+	if err := os.MkdirAll(config.Languages.Path, 0755); err != nil {
+		return nil, fmt.Errorf("failed to create languages directory: %w", err)
+	}
+
+	return config, nil
+}
