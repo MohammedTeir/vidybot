@@ -21,10 +21,10 @@ type DependencyChecker struct {
 func NewDependencyChecker() *DependencyChecker {
 	return &DependencyChecker{
 		dependencies: map[string][]string{
-			"yt-dlp": {"yt-dlp", "--version"},
-			"aria2c": {"aria2c", "--version"},
-			"ffmpeg": {"ffmpeg", "-version"},
-            "ffprobe": {"ffprobe", "-version"}, // Added ffprobe as a dependency to check
+			"yt-dlp":  {"yt-dlp", "--version"},
+			"aria2c":  {"aria2c", "--version"},
+			"ffmpeg":  {"ffmpeg", "-version"},
+			"ffprobe": {"ffprobe", "-version"}, // Added ffprobe as a dependency to check
 		},
 		DependencyPaths: make(map[string]string), // Initialize the new map, use exported name
 	}
@@ -79,12 +79,25 @@ func (dc *DependencyChecker) checkDependency(args []string) (bool, string, error
 	binary := args[0]
 	var foundPath string
 
-	// Try locating the binary via 'which'
-	whichCmd := exec.Command("which", binary)
+	// Try locating the binary via 'which' (or 'where' on Windows)
+	var whichCmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		whichCmd = exec.Command("where", binary)
+	} else {
+		whichCmd = exec.Command("which", binary)
+	}
+
 	out, err := whichCmd.Output()
 	if err == nil {
 		path := strings.TrimSpace(string(out))
 		if path != "" {
+			// On Windows, 'where' can return multiple paths. Take the first one.
+			if runtime.GOOS == "windows" {
+				paths := strings.Split(path, "\n")
+				if len(paths) > 0 {
+					path = strings.TrimSpace(paths[0])
+				}
+			}
 			if _, err := os.Stat(path); err == nil {
 				foundPath = path
 			}
@@ -107,6 +120,8 @@ func (dc *DependencyChecker) checkDependency(args []string) (bool, string, error
 	cmd := exec.CommandContext(ctx, foundPath, args[1:]...) // Use foundPath here
 	output, err := cmd.CombinedOutput()
 	if err != nil {
+		// On Windows, if the command runs but the output indicates an error (e.g., specific exit codes),
+		// we might need more nuanced checks. For now, rely on `CombinedOutput` error.
 		return false, "", fmt.Errorf("command failed: %w, output: %s", err, string(output))
 	}
 
@@ -114,7 +129,6 @@ func (dc *DependencyChecker) checkDependency(args []string) (bool, string, error
 }
 
 // InstallDependencies installs missing dependencies based on OS/distro
-// (No changes needed here for the main fix, but ensuring ffprobe is handled if it becomes a missing dep)
 func (dc *DependencyChecker) InstallDependencies() error {
 	results, _ := dc.CheckDependencies() // Re-check to get latest missing deps
 	missing := []string{}
@@ -185,6 +199,17 @@ func (dc *DependencyChecker) InstallDependencies() error {
 		if err := dc.installOnBrew(missing); err != nil {
 			return err
 		}
+
+	case "windows": // <<< ADDED WINDOWS SUPPORT
+		fmt.Println("Detected Windows OS.")
+		if err := dc.installOnChocolatey(missing); err != nil {
+			return err
+		}
+		// yt-dlp on Windows is also installed via pip
+		if contains(missing, "yt-dlp") {
+			return dc.installYtDlpWithPip()
+		}
+		return nil
 
 	default:
 		return fmt.Errorf("unsupported OS: %s", osType)
@@ -280,11 +305,52 @@ func (dc *DependencyChecker) installOnPkg(deps []string) error {
 	return nil
 }
 
+// installOnChocolatey installs packages via Chocolatey for Windows
+func (dc *DependencyChecker) installOnChocolatey(deps []string) error {
+	// First, check if Chocolatey itself is installed.
+	// We'll use a specific check for choco that doesn't rely on the main checkDependency for simplicity here,
+	// as it's a prerequisite.
+	_, chocoPath, err := dc.checkDependency([]string{"choco", "--version"})
+	if err != nil {
+		fmt.Println("Chocolatey (choco) not found. Please install Chocolatey first from https://chocolatey.org/install.")
+		return errors.New("Chocolatey is not installed or not in PATH")
+	} else {
+		fmt.Printf("Chocolatey found at: %s\n", chocoPath)
+	}
+
+	for _, dep := range deps {
+		if dep == "yt-dlp" {
+			continue // yt-dlp is installed via pip even on Windows
+		}
+		pkgName := mapDepToPkgWindows(dep)
+		if pkgName == "" {
+			continue
+		}
+		fmt.Printf("Installing %s via Chocolatey...\n", pkgName)
+		// Note: Many Chocolatey installations require administrative privileges.
+		// Inform the user about this.
+		fmt.Println("Note: This step might require administrative privileges. If it fails, please run your application as administrator.")
+		if err := runCommand("choco", []string{"install", "-y", pkgName}); err != nil {
+			return fmt.Errorf("failed to install %s via Chocolatey: %w", pkgName, err)
+		}
+	}
+	return nil
+}
+
 // installYtDlpWithPip installs yt-dlp using python3 -m pip
 func (dc *DependencyChecker) installYtDlpWithPip() error {
 	fmt.Println("Installing yt-dlp with pip...")
 
-	cmd := exec.Command("python3", "-m", "pip", "install", "--upgrade", "yt-dlp")
+	// Use python3 or python based on system availability
+	pythonCmd := "python3"
+	if _, err := exec.LookPath("python3"); err != nil {
+		pythonCmd = "python" // Fallback to 'python' if 'python3' isn't found
+		if _, err := exec.LookPath("python"); err != nil {
+			return errors.New("Neither 'python3' nor 'python' found. Python is required to install yt-dlp.")
+		}
+	}
+
+	cmd := exec.Command(pythonCmd, "-m", "pip", "install", "--upgrade", "yt-dlp")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
@@ -294,15 +360,15 @@ func (dc *DependencyChecker) installYtDlpWithPip() error {
 	return nil
 }
 
-// mapDepToPkg maps dependencies to OS package names
+// mapDepToPkg maps dependencies to OS package names (for apt, yum, brew)
 func mapDepToPkg(dep string) string {
 	switch dep {
 	case "aria2c":
 		return "aria2"
 	case "ffmpeg":
 		return "ffmpeg"
-    case "ffprobe": // Add ffprobe mapping
-        return "ffmpeg" // ffprobe usually comes with ffmpeg
+	case "ffprobe": // Add ffprobe mapping
+		return "ffmpeg" // ffprobe usually comes with ffmpeg
 	default:
 		return dep
 	}
@@ -315,8 +381,22 @@ func mapDepToPkgTermux(dep string) string {
 		return "aria2"
 	case "ffmpeg":
 		return "ffmpeg"
-    case "ffprobe": // Add ffprobe mapping for Termux
-        return "ffmpeg" // ffprobe usually comes with ffmpeg
+	case "ffprobe": // Add ffprobe mapping for Termux
+		return "ffmpeg" // ffprobe usually comes with ffmpeg
+	default:
+		return dep
+	}
+}
+
+// mapDepToPkgWindows maps dependencies to Windows package names (e.g., Chocolatey)
+func mapDepToPkgWindows(dep string) string {
+	switch dep {
+	case "aria2c":
+		return "aria2" // Common Chocolatey package name
+	case "ffmpeg":
+		return "ffmpeg" // Common Chocolatey package name
+	case "ffprobe":
+		return "ffmpeg" // ffprobe usually comes with ffmpeg
 	default:
 		return dep
 	}
@@ -373,4 +453,3 @@ func contains(slice []string, item string) bool {
 	}
 	return false
 }
-

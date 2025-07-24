@@ -14,7 +14,7 @@ import (
 // DependencyChecker checks required external dependencies
 type DependencyChecker struct {
 	dependencies    map[string][]string // map dep -> version check command args
-	dependencyPaths map[string]string   // New field to store found executable paths
+	DependencyPaths map[string]string   // Exported: Changed to uppercase 'D'
 }
 
 // NewDependencyChecker creates a new dependency checker with commands to check dependencies
@@ -26,12 +26,12 @@ func NewDependencyChecker() *DependencyChecker {
 			"ffmpeg": {"ffmpeg", "-version"},
             "ffprobe": {"ffprobe", "-version"}, // Added ffprobe as a dependency to check
 		},
-		dependencyPaths: make(map[string]string), // Initialize the new map
+		DependencyPaths: make(map[string]string), // Initialize the new map, use exported name
 	}
 }
 
 // CheckDependencies checks if dependencies are installed by verifying binary exists and command runs
-// It now also populates the dependencyPaths map.
+// It now also populates the DependencyPaths map.
 func (dc *DependencyChecker) CheckDependencies() (map[string]bool, error) {
 	results := make(map[string]bool)
 	missing := []string{}
@@ -49,7 +49,7 @@ func (dc *DependencyChecker) CheckDependencies() (map[string]bool, error) {
 		ok, path, err := dc.checkDependency(args) // Modified to return path
 		results[dep] = ok
 		if ok {
-			dc.dependencyPaths[dep] = path // Store the found path
+			dc.DependencyPaths[dep] = path // Store the found path, use exported name
 		}
 		if err != nil || !ok {
 			missing = append(missing, dep)
@@ -61,6 +61,12 @@ func (dc *DependencyChecker) CheckDependencies() (map[string]bool, error) {
 	}
 
 	return results, nil
+}
+
+// GetDependencyPaths returns the map of found dependency executable paths.
+// This is a public getter method to access the exported field.
+func (dc *DependencyChecker) GetDependencyPaths() map[string]string {
+	return dc.DependencyPaths
 }
 
 // checkDependency runs the version command to verify dependency presence with timeout context
