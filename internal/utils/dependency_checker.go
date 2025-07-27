@@ -179,7 +179,7 @@ func (dc *DependencyChecker) InstallDependencies() error {
 		fmt.Printf("Detected Linux distro: %s\n", distro)
 
 		switch distro {
-		case "debian", "ubuntu":
+		case "debian", "ubuntu","kali":
 			if err := dc.installOnApt(missing); err != nil {
 				return err
 			}
