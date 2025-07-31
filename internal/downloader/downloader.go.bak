@@ -240,17 +240,19 @@ func (d *VideoDownloader) downloadThumbnail(ctx context.Context, url string, dow
 		"--write-thumbnail",
 		"--convert-thumbnails", "png",
 		"--write-all-thumbnails",
+		"-v", // Add verbose output
+		"--print-traffic", // This will show network requests, helpful for debugging
 		"-o", filepath.Join(downloadPath, "thumbnail"),
 		url,
 	)
 
-	cmd := exec.CommandContext(ctx, ytDlpPath, args...) // Use the stored path
-	output, err := cmd.CombinedOutput()
+    cmd := exec.CommandContext(ctx, ytDlpPath, args...)
+   output, err := cmd.CombinedOutput()
 
-	if err != nil {
-		d.logger.Error("Thumbnail download failed: %v, output: %s", err, string(output))
-		return fmt.Errorf("thumbnail download failed: %w", err)
-	}
+   if err != nil {
+    d.logger.Error("Thumbnail download failed: %v, output: %s", err, string(output))
+    return fmt.Errorf("thumbnail download failed: %w", err)
+  }
 
 	// Find all downloaded thumbnails
 	files, err := filepath.Glob(filepath.Join(downloadPath, "thumbnail*.png"))
