@@ -65,7 +65,7 @@ func (d *VideoDownloader) getCookiesArgs(url string) []string {
 		"tiktok.com":     "tiktok",
 		"twitter.com":    "twitter",
 		"x.com":          "twitter",
-		"youtube.com":    "youtube", // FIX: Corrected YouTube domain
+		"youtube.com":    "youtube",
 		"instagram.com":  "instagramreels",
 		"facebook.com":   "facebook",
 		"pinterest.com":  "pinterest",

@@ -48,3 +48,111 @@ ERROR: Interrupted by user
 2025-07-22T16:24:17.491Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
 2025-07-22T16:24:17.491Z	INFO	utils/enhanced_logger.go:180	Matched domain: tiktok.com, looking for cookie file: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
 2025-07-22T16:24:17.491Z	INFO	utils/enhanced_logger.go:180	Cookie file found: /data/data/com.termux/files/home/VidyBot/app/config/tiktok_cookies.txt
+2025/07/29 17:42:35 [INFO] Starting Telegram Video Downloader Bot
+2025/07/29 17:42:38 [INFO] ✅ Dependency 'aria2c' is installed
+2025/07/29 17:42:38 [INFO] ✅ Dependency 'ffmpeg' is installed
+2025/07/29 17:42:38 [INFO] ✅ Dependency 'ffprobe' is installed
+2025/07/29 17:42:38 [INFO] ✅ Dependency 'yt-dlp' is installed
+2025/07/29 17:42:44 [INFO] Bot started successfully
+2025/07/29 17:42:57 [INFO] Received /lang command from chat ID: 1151779389
+2025/07/29 17:43:06 [INFO] User 1151779389 is setting interface language
+2025/07/29 17:43:08 [INFO] User 1151779389 selected language ar for interface
+2025-07-29T17:43:08.396Z	INFO	utils/enhanced_logger.go:180	Updated interface language for chat ID 1151779389: ar
+2025/07/29 17:43:22 [INFO] Received text from chat ID 1151779389: https://youtu.be/RK1albUMq1A?si=cChOn_d5cjv43CFm
+2025-07-29T17:43:22.995Z	INFO	utils/enhanced_logger.go:180	Created download request 6889083a4f0b8047e5633a84 for chat ID 1151779389: https://youtu.be/RK1albUMq1A?si=cChOn_d5cjv43CFm
+2025-07-29T17:43:23.105Z	INFO	utils/enhanced_logger.go:180	Updated download request 6889083a4f0b8047e5633a84 status to processing
+2025-07-29T17:43:23.109Z	INFO	utils/enhanced_logger.go:180	Downloading high-resolution PNG thumbnail from https://youtu.be/RK1albUMq1A?si=cChOn_d5cjv43CFm
+2025-07-29T17:43:23.109Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
+2025-07-29T17:44:07.085Z	INFO	utils/enhanced_logger.go:180	Successfully downloaded high-resolution PNG thumbnail to /data/data/com.termux/files/home/VidyBot/tmp/video_downloader/1753811003106033675/thumbnail.png
+2025-07-29T17:44:07.085Z	INFO	utils/enhanced_logger.go:180	Downloading primary video from https://youtu.be/RK1albUMq1A?si=cChOn_d5cjv43CFm
+2025-07-29T17:44:07.085Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36
+2025/07/29 17:46:17 [INFO] Shutting down bot...
+2025-07-29T17:46:17.878Z	WARN	utils/enhanced_logger.go:187	aria2c download failed, trying direct download: exit status 1, output: WARNING: External Downloader arguments given without specifying name. The arguments will be given to aria2c
+[youtube] Extracting URL: https://youtu.be/RK1albUMq1A?si=cChOn_d5cjv43CFm
+[youtube] RK1albUMq1A: Downloading webpage
+WARNING: [youtube] unable to extract yt initial data; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+WARNING: [youtube] Incomplete data received in embedded initial data; re-fetching using API.
+[youtube] RK1albUMq1A: Downloading initial data API JSON
+[youtube] RK1albUMq1A: Downloading tv client config
+[youtube] RK1albUMq1A: Downloading tv player API JSON
+[youtube] RK1albUMq1A: Downloading ios player API JSON
+[youtube] RK1albUMq1A: Downloading m3u8 information
+[info] RK1albUMq1A: Downloading 1 format(s): 299+251
+[download] Destination: /data/data/com.termux/files/home/VidyBot/tmp/video_downloader/1753811003106033675/video_base.f299.mp4
+[#721bb9 144KiB/2.7GiB(0%) CN:16 DL:182KiB ETA:4h21m56s]
+[#721bb9 368KiB/2.7GiB(0%) CN:16 DL:199KiB ETA:3h59m55s]
+[#721bb9 560KiB/2.7GiB(0%) CN:16 DL:203KiB ETA:3h55m16s]
+[#721bb9 1.3MiB/2.7GiB(0%) CN:16 DL:396KiB ETA:2h39s]
+[#721bb9 2.3MiB/2.7GiB(0%) CN:16 DL:514KiB ETA:1h32m46s]
+[#721bb9 3.2MiB/2.7GiB(0%) CN:16 DL:592KiB ETA:1h20m37s]
+[#721bb9 4.0MiB/2.7GiB(0%) CN:16 DL:619KiB ETA:1h17m5s]
+[#721bb9 4.7MiB/2.7GiB(0%) CN:16 DL:638KiB ETA:1h14m48s]
+[#721bb9 5.8MiB/2.7GiB(0%) CN:16 DL:684KiB ETA:1h9m39s]
+[#721bb9 6.4MiB/2.7GiB(0%) CN:16 DL:685KiB ETA:1h9m33s]
+[#721bb9 7.4MiB/2.7GiB(0%) CN:16 DL:752KiB ETA:1h3m20s]
+[#721bb9 8.1MiB/2.7GiB(0%) CN:16 DL:833KiB ETA:57m10s]
+[#721bb9 8.5MiB/2.7GiB(0%) CN:16 DL:842KiB ETA:56m33s]
+[#721bb9 9.5MiB/2.7GiB(0%) CN:16 DL:842KiB ETA:56m32s]
+[#721bb9 10MiB/2.7GiB(0%) CN:16 DL:822KiB ETA:57m56s]
+[#721bb9 11MiB/2.7GiB(0%) CN:16 DL:804KiB ETA:59m11s]
+[#721bb9 11MiB/2.7GiB(0%) CN:16 DL:788KiB ETA:1h23s]
+[#721bb9 12MiB/2.7GiB(0%) CN:16 DL:755KiB ETA:1h2m58s]
+[#721bb9 13MiB/2.7GiB(0%) CN:16 DL:748KiB ETA:1h3m32s]
+[#721bb9 13MiB/2.7GiB(0%) CN:16 DL:726KiB ETA:1h5m26s]
+[#721bb9 14MiB/2.7GiB(0%) CN:16 DL:726KiB ETA:1h5m29s]
+[#721bb9 15MiB/2.7GiB(0%) CN:16 DL:716KiB ETA:1h6m19s]
+[#721bb9 15MiB/2.7GiB(0%) CN:16 DL:698KiB ETA:1h8m5s]
+[#721bb9 16MiB/2.7GiB(0%) CN:16 DL:666KiB ETA:1h11m16s]
+[#721bb9 16MiB/2.7GiB(0%) CN:16 DL:665KiB ETA:1h11m26s]
+[#721bb9 17MiB/2.7GiB(0%) CN:16 DL:618KiB ETA:1h16m52s]
+[#721bb9 17MiB/2.7GiB(0%) CN:16 DL:624KiB ETA:1h16m1s]
+[#721bb9 18MiB/2.7GiB(0%) CN:16 DL:595KiB ETA:1h19m43s]
+[#721bb9 19MiB/2.7GiB(0%) CN:16 DL:597KiB ETA:1h19m27s]
+[#721bb9 19MiB/2.7GiB(0%) CN:16 DL:590KiB ETA:1h20m27s]
+[#721bb9 20MiB/2.7GiB(0%) CN:16 DL:587KiB ETA:1h20m48s]
+[#721bb9 21MiB/2.7GiB(0%) CN:16 DL:567KiB ETA:1h23m41s]
+[#721bb9 21MiB/2.7GiB(0%) CN:16 DL:557KiB ETA:1h25m4s]
+[#721bb9 22MiB/2.7GiB(0%) CN:16 DL:571KiB ETA:1h23m1s]
+[#721bb9 22MiB/2.7GiB(0%) CN:16 DL:572KiB ETA:1h22m50s]
+[#721bb9 23MiB/2.7GiB(0%) CN:16 DL:623KiB ETA:1h16m4s]
+[#721bb9 24MiB/2.7GiB(0%) CN:16 DL:642KiB ETA:1h13m48s]
+[#721bb9 24MiB/2.7GiB(0%) CN:16 DL:627KiB ETA:1h15m32s]
+[#721bb9 25MiB/2.7GiB(0%) CN:16 DL:582KiB ETA:1h21m24s]
+[#721bb9 25MiB/2.7GiB(0%) CN:16 DL:547KiB ETA:1h26m30s]
+[#721bb9 25MiB/2.7GiB(0%) CN:16 DL:516KiB ETA:1h31m39s]
+[#721bb9 26MiB/2.7GiB(0%) CN:16 DL:520KiB ETA:1h31m4s]
+[#721bb9 26MiB/2.7GiB(0%) CN:16 DL:517KiB ETA:1h31m32s]
+[#721bb9 27MiB/2.7GiB(0%) CN:16 DL:486KiB ETA:1h37m22s]
+[#721bb9 27MiB/2.7GiB(0%) CN:16 DL:452KiB ETA:1h44m41s]
+[#721bb9 27MiB/2.7GiB(0%) CN:16 DL:378KiB ETA:2h5m8s]
+[#721bb9 28MiB/2.7GiB(1%) CN:16 DL:377KiB ETA:2h5m28s]
+[#721bb9 28MiB/2.7GiB(1%) CN:16 DL:413KiB ETA:1h54m28s]
+[#721bb9 29MiB/2.7GiB(1%) CN:16 DL:409KiB ETA:1h55m39s]
+[#721bb9 29MiB/2.7GiB(1%) CN:16 DL:416KiB ETA:1h53m40s]
+[#721bb9 29MiB/2.7GiB(1%) CN:16 DL:419KiB ETA:1h52m42s]
+[#721bb9 30MiB/2.7GiB(1%) CN:16 DL:421KiB ETA:1h52m19s]
+[#721bb9 30MiB/2.7GiB(1%) CN:16 DL:399KiB ETA:1h58m21s]
+[#721bb9 31MiB/2.7GiB(1%) CN:16 DL:381KiB ETA:2h3m56s]
+[#721bb9 31MiB/2.7GiB(1%) CN:16 DL:419KiB ETA:1h52m42s]
+[#721bb9 31MiB/2.7GiB(1%) CN:16 DL:398KiB ETA:1h58m33s]
+[#721bb9 32MiB/2.7GiB(1%) CN:16 DL:393KiB ETA:1h59m59s]
+[#721bb9 33MiB/2.7GiB(1%) CN:16 DL:429KiB ETA:1h50m6s]
+[#721bb9 33MiB/2.7GiB(1%) CN:16 DL:420KiB ETA:1h52m14s]
+[#721bb9 33MiB/2.7GiB(1%) CN:16 DL:438KiB ETA:1h47m38s]
+[#721bb9 34MiB/2.7GiB(1%) CN:16 DL:434KiB ETA:1h48m44s]
+[#721bb9 34MiB/2.7GiB(1%) CN:16 DL:419KiB ETA:1h52m33s]
+[#721bb9 35MiB/2.7GiB(1%) CN:16 DL:440KiB ETA:1h47m3s]
+[#721bb9 35MiB/2.7GiB(1%) CN:16 DL:455KiB ETA:1h43m42s]
+[#721bb9 36MiB/2.7GiB(1%) CN:16 DL:508KiB ETA:1h32m51s]
+[#721bb9 37MiB/2.7GiB(1%) CN:16 DL:527KiB ETA:1h29m29s]
+[#721bb9 37MiB/2.7GiB(1%) CN:16 DL:511KiB ETA:1h32m10s]
+[#721bb9 38MiB/2.7GiB(1%) CN:16 DL:528KiB ETA:1h29m18s]
+[#721bb9 38MiB/2.7GiB(1%) CN:16 DL:533KiB ETA:1h28m24s]
+[#721bb9 39MiB/2.7GiB(1%) CN:16 DL:542KiB ETA:1h26m54s]
+[#721bb9 39MiB/2.7GiB(1%) CN:16 DL:596KiB ETA:1h19m1s]
+[#721bb9 40MiB/2.7GiB(1%) CN:16 DL:621KiB ETA:1h15m52s]
+[#721bb9 41MiB/2.7GiB(1%) CN:16 DL:627KiB ETA:1h15m3s]
+[#721bb9 41MiB/2.7GiB(1%) CN:16 DL
+ERROR: Interrupted by user
+
+2025-07-29T17:46:17.879Z	INFO	utils/enhanced_logger.go:180	Using USER_AGENT from env: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36

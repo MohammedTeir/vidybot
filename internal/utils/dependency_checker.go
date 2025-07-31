@@ -218,11 +218,11 @@ func (dc *DependencyChecker) InstallDependencies() error {
 	return nil
 }
 
-// installOnApt installs packages via apt-get for Debian/Ubuntu
+// installOnApt installs packages via apt for Debian/Ubuntu
 func (dc *DependencyChecker) installOnApt(deps []string) error {
 	fmt.Println("Updating apt package lists...")
-	if err := runCommand("apt-get", []string{"update", "-y"}); err != nil {
-		return fmt.Errorf("apt-get update failed: %w", err)
+	if err := runCommand("apt", []string{"update", "-y"}); err != nil {
+		return fmt.Errorf("apt update failed: %w", err)
 	}
 
 	for _, dep := range deps {
@@ -234,7 +234,7 @@ func (dc *DependencyChecker) installOnApt(deps []string) error {
 			continue
 		}
 		fmt.Printf("Installing %s via apt...\n", pkgName)
-		if err := runCommand("apt-get", []string{"install", "-y", pkgName}); err != nil {
+		if err := runCommand("apt ", []string{"install", "-y", pkgName}); err != nil {
 			return fmt.Errorf("failed to install %s: %w", pkgName, err)
 		}
 	}
